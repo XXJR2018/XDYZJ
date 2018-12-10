@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ApplyProveViewController">
+            <connections>
+                <outlet property="cardStatusLabel" destination="swd-wR-waM" id="KGm-hR-hYc"/>
+                <outlet property="layoutSafeAreaTopHeight" destination="YWl-1T-0jh" id="eg9-4q-e3N"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="workProveBtn" destination="rr8-mw-Zoh" id="T5L-VC-t3K"/>
+                <outlet property="workStatusLabel" destination="bw2-jg-YOk" id="Rgd-da-GQ6"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qBG-L5-utH">
+                    <rect key="frame" x="0.0" y="64" width="320" height="70"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qhN-e5-xjH">
+                            <rect key="frame" x="10" y="0.0" width="110" height="70"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="-5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="身份认证" image="privatism-49">
+                                <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-2" translatesAutoresizingMaskIntoConstraints="NO" id="jkR-yf-0OS">
+                            <rect key="frame" x="300" y="27.5" width="10" height="15"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="10" id="N55-D2-rY1"/>
+                                <constraint firstAttribute="height" constant="15" id="tXg-r6-3AQ"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未认证" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="swd-wR-waM">
+                            <rect key="frame" x="215" y="0.0" width="80" height="70"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="70" id="O1b-Xd-4Ns"/>
+                                <constraint firstAttribute="width" constant="80" id="rxv-I8-0oJ"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nSW-wg-jhq">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
+                            <connections>
+                                <action selector="cardProve:" destination="-1" eventType="touchUpInside" id="un9-BG-CCL"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="nSW-wg-jhq" secondAttribute="bottom" id="26M-Zh-FTx"/>
+                        <constraint firstAttribute="trailing" secondItem="jkR-yf-0OS" secondAttribute="trailing" constant="10" id="AU2-jk-efT"/>
+                        <constraint firstItem="jkR-yf-0OS" firstAttribute="top" secondItem="qBG-L5-utH" secondAttribute="top" constant="27.5" id="J0W-uq-EoI"/>
+                        <constraint firstAttribute="height" constant="70" id="Ovu-1p-2za"/>
+                        <constraint firstAttribute="trailing" secondItem="nSW-wg-jhq" secondAttribute="trailing" id="VdG-AF-65X"/>
+                        <constraint firstItem="nSW-wg-jhq" firstAttribute="leading" secondItem="qBG-L5-utH" secondAttribute="leading" id="cI3-tS-Nvc"/>
+                        <constraint firstItem="jkR-yf-0OS" firstAttribute="leading" secondItem="swd-wR-waM" secondAttribute="trailing" constant="5" id="hle-Mu-Odt"/>
+                        <constraint firstItem="nSW-wg-jhq" firstAttribute="top" secondItem="qBG-L5-utH" secondAttribute="top" id="mTI-hY-vPl"/>
+                        <constraint firstItem="swd-wR-waM" firstAttribute="top" secondItem="qBG-L5-utH" secondAttribute="top" id="sWV-PV-YVB"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7km-3U-Amr">
+                    <rect key="frame" x="0.0" y="144" width="320" height="70"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rr8-mw-Zoh">
+                            <rect key="frame" x="10" y="0.0" width="110" height="70"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <inset key="titleEdgeInsets" minX="5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="-5" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="工作认证" image="privatism-51">
+                                <color key="titleColor" red="0.60392156862745094" green="0.60392156862745094" blue="0.60392156862745094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <state key="selected" title="工作认证" image="privatism-50">
+                                <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-2" translatesAutoresizingMaskIntoConstraints="NO" id="sAf-Em-Qly">
+                            <rect key="frame" x="300" y="27.5" width="10" height="15"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="15" id="4OT-qk-RUe"/>
+                                <constraint firstAttribute="width" constant="10" id="Mh1-vR-2cy"/>
+                            </constraints>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未认证" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bw2-jg-YOk">
+                            <rect key="frame" x="215" y="0.0" width="80" height="70"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="QpA-M8-ZzA"/>
+                                <constraint firstAttribute="height" constant="70" id="x22-sO-kfh"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" red="0.60392156860000001" green="0.60392156860000001" blue="0.60392156860000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P5G-Ex-Cqx">
+                            <rect key="frame" x="0.0" y="-1" width="320" height="70"/>
+                            <connections>
+                                <action selector="workProve:" destination="-1" eventType="touchUpInside" id="18x-j7-1kt"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="P5G-Ex-Cqx" secondAttribute="bottom" constant="1" id="1vj-Q4-Jnw"/>
+                        <constraint firstItem="sAf-Em-Qly" firstAttribute="top" secondItem="7km-3U-Amr" secondAttribute="top" constant="27.5" id="5S9-gd-M1J"/>
+                        <constraint firstItem="P5G-Ex-Cqx" firstAttribute="leading" secondItem="7km-3U-Amr" secondAttribute="leading" id="6kW-cM-Egz"/>
+                        <constraint firstAttribute="trailing" secondItem="P5G-Ex-Cqx" secondAttribute="trailing" id="HQ9-Fo-IWQ"/>
+                        <constraint firstAttribute="height" constant="70" id="Nz6-zs-6Pc"/>
+                        <constraint firstItem="P5G-Ex-Cqx" firstAttribute="top" secondItem="7km-3U-Amr" secondAttribute="top" constant="-1" id="QMF-DW-9qb"/>
+                        <constraint firstItem="sAf-Em-Qly" firstAttribute="leading" secondItem="bw2-jg-YOk" secondAttribute="trailing" constant="5" id="rIq-jL-yPu"/>
+                        <constraint firstAttribute="trailing" secondItem="sAf-Em-Qly" secondAttribute="trailing" constant="10" id="sX7-yG-dMU"/>
+                        <constraint firstItem="bw2-jg-YOk" firstAttribute="top" secondItem="7km-3U-Amr" secondAttribute="top" id="sxn-rV-9cf"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="7km-3U-Amr" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="NBb-7X-72R"/>
+                <constraint firstItem="qBG-L5-utH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="64" id="YWl-1T-0jh"/>
+                <constraint firstAttribute="trailing" secondItem="qBG-L5-utH" secondAttribute="trailing" id="c3f-G4-97D"/>
+                <constraint firstItem="qBG-L5-utH" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="i0h-al-X9o"/>
+                <constraint firstAttribute="trailing" secondItem="7km-3U-Amr" secondAttribute="trailing" id="rXH-8P-JJn"/>
+                <constraint firstItem="7km-3U-Amr" firstAttribute="top" secondItem="qBG-L5-utH" secondAttribute="bottom" constant="10" id="yJS-DF-ciQ"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow-2" width="10" height="15"/>
+        <image name="privatism-49" width="42" height="42"/>
+        <image name="privatism-50" width="43" height="43"/>
+        <image name="privatism-51" width="43" height="43"/>
+    </resources>
+</document>

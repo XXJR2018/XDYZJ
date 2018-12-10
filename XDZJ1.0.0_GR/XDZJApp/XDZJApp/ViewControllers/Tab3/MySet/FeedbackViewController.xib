@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedbackViewController">
+            <connections>
+                <outlet property="NavConstraint" destination="8lf-Zf-TPT" id="EtK-oK-Lwg"/>
+                <outlet property="imageView" destination="5gi-jl-17L" id="2wM-MY-O5Q"/>
+                <outlet property="imgViewLayoutHeight" destination="pSy-9z-MzU" id="l4M-7j-4sP"/>
+                <outlet property="textView" destination="XfK-1l-JNf" id="tst-RQ-Vcd"/>
+                <outlet property="textviewLayoutHeight" destination="fjr-O4-do7" id="YRL-L2-mUM"/>
+                <outlet property="updataBtn" destination="I7G-9s-BWX" id="j1d-cw-xPx"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="请输入您的宝贵意见!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XfK-1l-JNf">
+                    <rect key="frame" x="15" y="65" width="290" height="128"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="fjr-O4-do7"/>
+                    </constraints>
+                    <color key="textColor" red="0.78823529411764703" green="0.78823529411764703" blue="0.78823529411764703" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="dV5-0h-LRD"/>
+                    </connections>
+                </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g0A-XI-uQ1">
+                    <rect key="frame" x="15" y="430" width="290" height="45"/>
+                    <color key="backgroundColor" red="0.18823529411764706" green="0.42352941176470588" blue="0.88627450980392153" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="45" id="hgQ-U5-UlF"/>
+                    </constraints>
+                    <state key="normal" title="提交">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="self.layer.cornerRadius">
+                            <integer key="value" value="5"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="nextBtn:" destination="-1" eventType="touchUpInside" id="M1q-Vy-9ZP"/>
+                    </connections>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="5gi-jl-17L">
+                    <rect key="frame" x="15" y="210" width="290" height="170"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="170" id="pSy-9z-MzU"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I7G-9s-BWX">
+                    <rect key="frame" x="115" y="250" width="90" height="90"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="90" id="Z11-y6-SKW"/>
+                        <constraint firstAttribute="width" constant="90" id="red-vH-oOd"/>
+                    </constraints>
+                    <state key="normal" image="addImage"/>
+                    <connections>
+                        <action selector="uodataBtn:" destination="-1" eventType="touchUpInside" id="lKl-a6-PAe"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="g0A-XI-uQ1" firstAttribute="top" secondItem="5gi-jl-17L" secondAttribute="bottom" constant="50" id="1p8-Mc-ho2"/>
+                <constraint firstItem="5gi-jl-17L" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="7BZ-XY-sxR"/>
+                <constraint firstItem="XfK-1l-JNf" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="65" id="8lf-Zf-TPT"/>
+                <constraint firstItem="XfK-1l-JNf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="GS5-4v-ilN"/>
+                <constraint firstAttribute="trailing" secondItem="XfK-1l-JNf" secondAttribute="trailing" constant="15" id="OZ6-0t-QaE"/>
+                <constraint firstItem="5gi-jl-17L" firstAttribute="top" secondItem="XfK-1l-JNf" secondAttribute="bottom" constant="17" id="cBq-q9-VxM"/>
+                <constraint firstItem="g0A-XI-uQ1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="15" id="cG0-nm-VQs"/>
+                <constraint firstItem="I7G-9s-BWX" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="h29-bE-CT2"/>
+                <constraint firstAttribute="trailing" secondItem="g0A-XI-uQ1" secondAttribute="trailing" constant="15" id="prV-1Z-Ei7"/>
+                <constraint firstAttribute="trailing" secondItem="5gi-jl-17L" secondAttribute="trailing" constant="15" id="tep-HH-DCF"/>
+                <constraint firstItem="I7G-9s-BWX" firstAttribute="top" secondItem="XfK-1l-JNf" secondAttribute="bottom" constant="57" id="v9D-hp-ZfM"/>
+            </constraints>
+        </view>
+    </objects>
+    <resources>
+        <image name="addImage" width="90" height="90"/>
+    </resources>
+</document>

@@ -1,0 +1,1766 @@
+//
+//  PDAPI.m
+//  DDGProject
+//
+//  Created by Cary on 15/2/27.
+//  Copyright (c) 2015年 Cary. All rights reserved.
+//
+
+#import "PDAPI.h"
+
+/*!
+ @brief 基础API接口地址, 注意后面必须有/
+ */
+
+// 接口URL
+static NSString *const kBaseURL = @"http://phone.xxjr.com/";
+static NSString *const kBaseImageURL = @"viewFile/client?imageName=";
+
+
+#if PMHEnableSwitchURLGesture
+/*!
+ @brief 存储baseurl的key
+ */
+static NSString *const kBaseURLinUserDefaultsString     = @"URLinUserDefaultsString";
+/*!
+ @brief 存储统计url的key
+ */
+static NSString *const kStatURLinUserDefaultsString     = @"kStatURLinUserDefaultsString";
+/*!
+ @brief 是否允许URL后带版本号
+ */
+BOOL kEnableUrlVersion = YES;
+
+#endif
+
+// 版本检测
+static NSString *const kDDGCheckVersionAPIString = @"home/checkVersion";
+// 获取验证码
+static NSString *const kDDGRegSendMsgAPIString = @"SendMsg/regSendMsg";
+//手机号注册
+static NSString *const kDDGUserGetRegisterAPIString = @"cust/register";
+//手机号注册获取验证码
+static NSString *const KDDGUserRegistPwdSendMsgAPIString = @"smsAction/nologin/register";
+// 用户注册协议
+static NSString *const kDDGGetAgreementAPIString = @"app/about/registerProtocol";
+//忘记密码
+static NSString *const KDDGUserForgetPasswordAPIString = @"cust/forgetPwd";
+//忘记密码获取验证码
+static NSString *const KDDGUserForgetPwdSendMsgAPIString = @"smsAction/nologin/forgetPwd";
+// 登录
+static NSString *const kDDGGetLoginAPIString = @"cust/login";
+// 退出登录
+static NSString *const kDDGUserDoLogoutAPIString = @"cust/logout";
+//
+
+
+// 获取引导页图片列表
+static NSString *const kDDGGetLoadingImgsAPIString = @"Sys/GetLoadingImgs";
+
+//上传照片
+static NSString *const kDDGUserUploadPhotoAPIString = @"user/avatar";
+// 意见反馈
+static NSString *const kDDGFeedBackAPIString = @"account/order/orderDtlLog";
+
+// 获取版本号
+static NSString *const kDDGGetVersionAPIString = @"page/version";
+
+
+
+/**
+ *  ////  首页 (交单相关)
+ */
+// 获取banner 广告
+static NSString *const kDDGGetBannerAPIString = @"home/init";
+// 武功秘籍类型
+static NSString *const kDDGGetMiJiAPIString = @"miji/mijiInfo";
+// 武功秘籍列表
+static NSString *const kDDGGetQueryListAPIString = @"miji/queryList";
+// 武功秘籍详情
+static NSString *const kDDGGetMiJiDetailAPIString = @"app/miji/detail";
+// 武功秘籍详情分享
+static NSString *const kDDGGetMiJiShareAPIString = @"app/miji/share";
+// 上传城市
+static NSString *const kDDGGetSelectCityAPIString = @"app/account/rzb/question/home";
+// 贷款测算
+static NSString *const kDDGGetCalcLoanAmountAPIString = @"org/loan/calcLoanAmount";
+// 资讯详情
+static NSString *const kDDGUserGetCardNewsDetailInfoAPIString = @"app/zixun/detail";
+// 资讯详情分享
+static NSString *const kDDGUserGetCardNewsShareInfoAPIString = @"app/zixun/share";
+// 资讯分享成功修改积分
+static NSString *const kDDGUserGetRewardShareInfoAPIString = @"account/reward/share";
+
+// 信贷员列表
+static NSString *const kDDGGetQueryCirclesListAPIString = @"account/circle/queryCircles";
+// 增加关注
+static NSString *const kDDGGetAddJoinCirclesAPIString = @"account/circle/addJoin";
+
+//取消关注
+static NSString *const kDDGGetCancelJoinCirclesAPIString = @"account/circle/cancelJoin";
+
+// 我的关注列表
+static NSString *const kDDGGetMyJoinListAPIString = @"account/circle/myJoinList";
+
+
+// 机构列表
+static NSString *const kDDGGetInstitutionListAPIString = @"org/queryList";
+// 机构产品
+static NSString *const kDDGGetInstitutionProductListAPIString = @"org/loan/queryList";
+// 机构产品详情
+static NSString *const kDDGGetInstitutionProductDetailAPIString = @"org/loan/queryDetail";
+
+// 交单
+static NSString *const kDDGGetSendOrderAPIString = @"account/order/simpleSubmit";
+// 交单 -- 简单交单之获取验证码
+static NSString *const kDDGGetSendOrderVerifyCodeAPIString = @"smsAction/nologin/simpleSubmit";
+// 交单 -- 简单交单之微信分享交单
+static NSString *const kDDGGetSendOrderWXAPIString = @"app/share/applyLoan";
+// 交单 -- 简单交单之短信分享交单
+static NSString *const kDDGGetSendOrderSMSAPIString = @"account/order/smsSubmit";
+// 取消交单
+static NSString *const kDDGGetCancelOrderAPIString = @"account/order/cancelOrderDtl";
+
+// 我的交单
+static NSString *const kDDGGetMyOrderAPIString = @"account/order/queryList";
+
+// 交单详情
+static NSString *const kDDGGetOrderDetailAPIString = @"account/order/queryDetail";
+
+// 读取材料
+static NSString *const kDDGGetFileListAPIString = @"account/order/materialList";
+
+// 上传材料
+static NSString *const kDDGGetSendFileAPIString = @"uploadAction/uploadFile";
+
+// 删除材料
+static NSString *const kDDGGetDeleteFileAPIString = @"account/order/delImg";
+
+// 完整交单 -- 提交材料
+static NSString *const kDDGGetSendCompleteOrderAPIString = @"account/order/fullSubmit";
+// 完整交单 -- 重新提交材料
+static NSString *const kDDGGetReSendCompleteOrderAPIString = @"account/order/resubmit";
+
+// 查号记录
+static NSString *const kDDGGetSearchRecordListAPIString = @"account/query/queryList";
+// 申请查号
+static NSString *const kDDGGetSearchNumAPIString = @"account/query/add";
+
+/**
+ *  获取金融资讯
+ */
+static NSString *const kDDGGetFinanceNewsAPIString = @"zixun/queryList";
+
+
+
+
+// 系统通知
+static NSString *const kDDGGetNewsQueryListAPIString = @"account/cust/message/queryList";
+// 系统通知详情
+static NSString *const kDDGGetViewAPIString = @"account/cust/message/view";
+
+
+//征信查询
+//图片验证码
+static NSString *const kDDGGetCheckCreditAPIString = @"cpQuery/credit/page/viewImageStream";
+//注册第一步
+static NSString *const kDDGGetCheckCreditRegAPIString = @"cpQuery/credit/page/reg";
+//注册第二步
+static NSString *const kDDGGetCheckCreditRegSupplementAPIString = @"cpQuery/credit/page/regSupplementInfo";
+// 登陆
+static NSString *const kDDGGetCheckCreditLoginAPIString = @"cpQuery/credit/page/login";
+//注册验证码
+static NSString *const kDDGGetCheckCreditSendRegMsgAPIString = @"cpQuery/credit/page/sendRegMsg";
+//问题验证问题
+static NSString *const kDDGGetCheckCreditIdentityDataAPIString = @"cpQuery/credit/page/questionIdentityData";
+//提交问题
+static NSString *const kDDGGetCheckCreditQuestionAPIString = @"cpQuery/credit/page/submitQuestion";
+//用户列表
+static NSString *const kDDGGetCheckCreditInitDataAPIString = @"cpQuery/credit/page/initData";
+//用户列表信息
+static NSString *const kDDGGetCheckCreditReportListDataAPIString = @"cpQuery/credit/page/creditReportListData";
+
+//核对银行验证码
+static NSString *const kDDGGetCheckCreditReportAPIString = @"cpQuery/credit/page/creditReport";
+//信息列表
+static NSString *const kDDGGetCheckCreditReportDataAPIString = @"cpQuery/credit/page/creditReportData";
+//贷款记录明细
+static NSString *const kDDGGetCheckCreditRecordDataAPIString = @"cpQuery/credit/page/creditRecordData";
+//查询记录明细
+static NSString *const kDDGGetCheckQueryReocrdDataAPIString = @"cpQuery/credit/page/queryReocrdData";
+
+//企业查询
+//企业查询结果
+static NSString *const kDDGGetCheckQueryDataAPIString = @"cpQuery/company/page/queryData";
+//企业查询结果详情
+static NSString *const kDDGGetCheckQueryDetailDataAPIString = @"cpQuery/company/page/detailData";
+
+//失信人查询
+// 失信人查询结果
+static NSString *const kDDGGetCheckSXRQueryDataAPIString = @"cpQuery/lose/page/sxrQueryData";
+// 失信人查询结果详情
+static NSString *const kDDGGetCheckSXRDetailDataAPIString = @"cpQuery/lose/page/sxrDetailData";
+
+//房价评估
+// 所在城市列表
+static NSString *const kDDGGetCheckAllCityAPIString = @"cpQuery/allCity";
+// 提交所在城市
+static NSString *const kDDGGetEvalTypeListAPIString = @"cpQuery/app/eval/evalTypeList";
+// 选择物业查询楼盘
+static NSString *const kDDGGetQueryEstateAPIString = @"cpQuery/app/eval/queryEstate";
+// 选择物业查询楼栋
+static NSString *const kDDGGetQueryBuildingAPIString = @"cpQuery/app/eval/queryBuilding";
+// 选择物业查询门牌号
+static NSString *const kDDGGetQueryHouseAPIString = @"cpQuery/app/eval/queryHouse";
+// 提交评估
+static NSString *const kDDGGetSaveHouseEvalAPIString = @"cpQuery/app/eval/saveHouseEval";
+// 评估历史
+static NSString *const kDDGGetHistoryRecordAPIString = @"cpQuery/app/eval/historyRecord";
+
+
+// 资讯头像
+static NSString *const kDDGGetFinanceNewsHeadImgAPIString = @"cpQuery/app/eval/historyRecord";
+// 直贷头像
+static NSString *const kDDGGetLoanListHeadImgAPIString = @"uploadAction/viewImage?imageName=";
+// 抢单－直借
+static NSString *const kDDGGetLoanLightingAPIString = @"rzb/account/borrow/robLend";
+// 抢单－甩单
+static NSString *const kDDGGetLoanLighting2APIString = @"account/dai/rob/robExchange";
+
+/**
+ *  ////  客户
+ */
+// 客户列表
+static NSString *const kDDGGetContactListString = @"account/contact/queryList";
+// 删除客户
+static NSString *const kDDGGetDeleteContactString = @"account/contact/delete";
+// 添加客户
+static NSString *const kDDGGetAddContactString = @"account/contact/add";
+// 修改客户信息
+static NSString *const kDDGGetUpdateContactString = @"account/contact/update";
+// 修改客户标签初始数据
+static NSString *const kDDGGetContactMarksDtlString = @"account/contact/queryTagDtl";
+// 修改客户标签
+static NSString *const kDDGGetUpdateContactMarksString = @"account/contact/updateTag";
+// 客户标星处理
+static NSString *const kDDGGetUpdateContactStarString = @"account/contact/important";
+
+
+// 查寻标签
+static NSString *const kDDGGetMarksListString = @"account/tag/queryList";
+// 标签下的客户
+static NSString *const kDDGGetMarksContactListString = @"account/tag/queryContact";
+// 添加标签
+static NSString *const kDDGGetAddMarksString = @"account/tag/add";
+// 修改标签
+static NSString *const kDDGGetUpdateMarksString = @"account/tag/update";
+// 删除标签
+static NSString *const kDDGGetDeleteMarksString = @"account/tag/delete";
+
+/**
+ *  ////  微店
+ */
+// 微店首页
+static NSString *const kDDGUserGetWDShopIndexInfoAPIString = @"account/wd/info/index";
+// 申请列表
+static NSString *const kDDGUserGetWDShopApplyListInfoAPIString = @"account/wd/apply/list";
+// 申请产品详情
+static NSString *const kDDGUserGetApplyDetailInfoAPIString = @"account/wd/apply/info";
+
+// 创建微店的初始化信息
+static NSString *const kDDGUserGetWDShopWdInfoInitInfoAPIString = @"account/wd/info/wdInfoInit";
+// 修改微店信息
+static NSString *const kDDGUserGetWDShopEditInfoAPIString = @"account/wd/info/editWd";
+// 查询微店信息
+static NSString *const kDDGUserGetWDShopQueryInfoAPIString = @"account/wd/info/queryWdInfo";
+// 微店统计
+static NSString *const kDDGUserGetWdApplyStatistic = @"account/wd/apply/statistic";
+// 微店排行
+static NSString *const kDDGUserGetwdShopRankInfoAPIString = @"account/wd/info/wdRank";
+// 微店产品增加/修改
+static NSString *const kDDGUserGetWdProductInfoAPIString = @"account/wd/product/edit";
+// 微店产品增加第二步
+static NSString *const kDDGUserGetWdProductDtlInfoAPIString = @"account/wd/product/editRule";
+
+// 微店产品列表
+static NSString *const kDDGUserGetWdProductListInfoAPIString = @"account/wd/product/list";
+// 微店产品删除
+static NSString *const kDDGUserGetWddelWdProductInfoAPIString = @"account/wd/product/delete";
+// 微店产品信息
+static NSString *const kDDGUserGetWdPordInfoAPIString = @"account/wd/product/info";
+// 微店产品信息第二步
+static NSString *const kDDGUserGetWdProRuleInfoAPIString = @"account/wd/product/ruleInfo";
+
+// 微店名片信息
+static NSString *const kDDGUserGetwdCardInfoAPIString = @"account/quweitu/funyCardInfo";
+// 微店名片新增或修改
+static NSString *const kDDGUserGetwdeditCardInfoAPIString = @"account/wdShop/editWdCard";
+
+
+// 成功案例列表
+static NSString *const kDDGUserGetCustCaseListInfoAPIString = @"account/wd/case/list";
+// 添加成功案例
+static NSString *const kDDGUserGetEditCustCaseInfoAPIString = @"account/wd/case/edit";
+// 查询成功案例
+static NSString *const kDDGUserGetCustCaseInfoAPIString = @"account/wd/case/info";
+// 删除成功案例
+static NSString *const kDDGUserGetDelCustCaseInfoAPIString = @"account/wd/case/delete";
+
+// 微店模板
+static NSString *const kDDGUserGetTemplateListInfoAPIString = @"account/wd/info/templateList";
+// 微店模板修改
+static NSString *const kDDGUserGetEditWdShopInfoAPIString = @"account/wd/info/editWd";
+// 分享微店H5
+static NSString *const kDDGUserGetShareWdWedInfoAPIString = @"app/wd/share/preSharePage";
+// 所有城市列表
+static NSString *const kDDGUserGetWDShopCityInfoAPIString = @"area/allCity";
+
+/**
+ *  ////  我的
+ */
+// 用户信息
+static NSString *const kDDGGetUserInfoAPIString = @"cust/userInfo";
+// 用户基本信息
+static NSString *const kDDGGetUserBaseInfoAPIString = @"account/cust/query/getInfo";
+// 一次性提交个人信息
+static NSString *const kDDGUserGetModifyInfoAPIString = @"account/cust/info/modifyInfo";
+
+
+
+// 修改或添加个人信息
+static NSString *const kDDGUserGetUserPIMInfoAPIString = @"account/cust/modifyUserInfo";
+// 修改或添加个人简介
+static NSString *const kDDGUserGetInsertInfoAPIString = @"account/cust/insertInfo";
+
+// 头像
+static NSString *const kDDGUserGetUserHeadImageInfoAPIString = @"viewFile/viewImage";
+// 身份认证
+static NSString *const kDDGGetValidateNameInfoAPIString = @"account/cust/info/validateName";
+// 工作认证
+static NSString *const kDDGGetProfessionInfoAPIString = @"account/cust/info/validateCard";
+
+// 服务区域
+static NSString *const kDDGGetAllAreaInfoAPIString = @"area/allAreaInfo";
+//提交工作地点
+static NSString *const kDDGGetModifyLocaAPIString = @"account/cust/modifyLocaInfo";
+
+// 第一次添加邮箱
+static NSString *const kDDGUserGetUserEmailInfoAPIString = @"account/cust/email/insertEmail";
+// 修改邮箱
+static NSString *const kDDGUserGetUserAmendEmailInfoAPIString = @"account/cust/email/updateEmail";
+// 修改邮箱获取验证码
+static NSString *const KDDGUserForgetEmailSendMsgAPIString = @"smsAction/login/email";
+// 修改登录密码
+static NSString *const kDDGUserGetUserModifyLoginPwdInfoAPIString = @"account/cust/info/modifyLoginPwd";
+// 公司简介,关于小小金融
+static NSString *const kDDGUserGetUserXxjrInfoAPIString = @"app/about/xxjr";
+// 设置交易密码
+static NSString *const KDDGSetPayPasswordAPIString = @"User/setUserPayPwd";
+// 修改交易密码
+static NSString *const KDDGUserEditPayPwdAPIString = @"User/editUserPayPwd";
+// 更换手机
+static NSString *const kDDGUserGetUserNewTelInfoAPIString = @"account/cust/info/chanageNewTel";
+// 更换手机获取原手机验证码
+static NSString *const kDDGUserGetUserChangeTelSendAPIString = @"smsAction/login/changeTel";
+// 验证获取的原手机验证码
+static NSString *const kDDGUserGetUserTelInfoAPIString = @"smsAction/valid/login/changeTel";
+// 更换手机获取新手机验证码
+static NSString *const kDDGUserGetUserTelNewSendAPIString = @"smsAction/login/changeTelNew";
+// 意见反馈，设置里面的
+static NSString *const kDDGUserGetUserFeedBackInfoAPIString = @"account/cust/feedback";
+
+/*!
+ @brief 我的业绩
+ */
+// 我的业绩总信息
+static NSString *const kDDGUserGetUserSummaryInfoAPIString = @"account/reward/summary";
+// 绑定微信
+static NSString *const kDDGUserBindingWXAPIString = @"account/cust/info/bindingWX";
+// 剩余佣金提现处理
+static NSString *const kDDGUserGetUserAddWithdrawInfoAPIString = @"account/fund/addWithdraw";
+// 剩余佣金提现处理获取验证码
+static NSString *const kDDGUserGetWithdrawSendInfoAPIString = @"smsAction/login/withdraw";
+// 已返佣金
+static NSString *const kDDGUserGetUserQueryMyListInfoAPIString = @"account/reward/queryMyList";
+// 提现明细
+static NSString *const kDDGUserGetUserQueryWithdrawInfoAPIString = @"account/fund/queryWithdraw";
+//可提现的银行
+static NSString *const kDDGUserGetUserBankAllListInfoAPIString = @"account/bank/addBankInit";
+// 获取银行卡信息
+static NSString *const kDDGUserGetUserCardListInfoAPIString = @"account/bank/cardList";
+// 添加银行卡
+static NSString *const kDDGUserGetUserBankAddCardInfoAPIString = @"account/bank/addCard";
+// 收徒信息
+static NSString *const kDDGUserGetUsershoutuInfoAPIString = @"account/cust/shoutu/shoutuSummary";
+// 收徒赚佣金分享
+static NSString *const kDDGUserGetUsershoutuShareInfoAPIString = @"app/share/shoutuShare";
+
+// 我的学徒
+static NSString *const kDDGUserGetUserApprenticeListInfoAPIString = @"app/account/apprenticeList";
+// 为什么要收徒
+static NSString *const kDDGUserGetUserReasonInfoAPIString = @"app/about/reason";
+// 如何收取更多徒弟
+static NSString *const kDDGUserGetUserStrategyInfoAPIString = @"app/about/strategy";
+// 我的会员
+static NSString *const kDDGUserGetUserCustGradeInfoAPIString= @"app/account/member/custGrade";
+// 我的抢单
+static NSString *const kDDGUserGetUserGrabListInfoAPIString= @"app/account/signOn/grabList";
+
+@implementation PDAPI
+
+//查看图片
++ (NSString *)imageRouteAPI{
+    return @"https://sys.xxjr.com/viewFile/viewImage";
+    return @"https://192.168.10.91:81/sys/viewFile/viewImage";
+}
+
+// 跳转微信端h5路径
++ (NSString *)WXSysRouteAPI{
+    return @"https://phone.xxjr.com/";
+    return @"http://192.168.10.91:81/";
+}
+
++ (NSString *)getBaseUrlString{
+#if isDevelopment
+//    return @"http://192.168.10.88/appWeb/";
+    return @"https://app.xxjr.com/";
+    switch ([[[NSUserDefaults standardUserDefaults] objectForKey:kdomainSelectedIndex] integerValue]) {
+        case 0:
+            return @"http://192.168.10.91:81/appWeb/";
+            return @"http://192.168.10.209/";
+            break;
+        case 1:
+            NSLog(@"测试环境。。。。。。。。。");
+            return @"http://192.168.31.50/";
+            break;
+        case 2:
+            NSLog(@"预发布环境。。。。。。。。。");
+            return @"http://test.xxjr.com/";
+            break;
+        case 3:
+            NSLog(@"正式环境。。。。。。。。。");
+            return @"http://192.168.31.57:8080/";
+            break;
+        default:
+            NSLog(@"预发布环境。。。。。。。。。");
+            return @"http://183.62.136.148:9093/app/";
+            break;
+    }
+#else
+    
+    return kBaseURL;
+#endif
+}
+
++ (NSString *)getBaseImageUrlString{
+    return kBaseImageURL;
+}
+
+
+#if PMHEnableSwitchURLGesture
+
+/*!
+ @brief     设置base url和stat url
+ */
++ (void)setBaseUrl:(NSString *)baseUrlString statUrl:(NSString *)statUrlString
+{
+    [[NSUserDefaults standardUserDefaults] setObject:baseUrlString forKey:kBaseURLinUserDefaultsString];
+    [[NSUserDefaults standardUserDefaults] setObject:statUrlString forKey:kStatURLinUserDefaultsString];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+#endif
+
+/*!
+ @brief     获取完整api的url
+ @param     urlString url的名称
+ @return    NSString 完全的api
+ */
++ (NSString *)getFullApi:(NSString *)urlString
+{
+#if PMHEnableSwitchURLGesture
+    if (kEnableUrlVersion)
+        return DDG_str(@"%@v%@/%@", [PDAPI getBaseUrlString], PDVersionString, urlString);
+    else
+        return DDG_str(@"%@%@", [PDAPI getBaseUrlString], urlString);
+#else
+    
+    return DDG_str(@"%@%@", [PDAPI getBaseUrlString], urlString);
+#endif
+}
+
++ (void)setApp_Token:(NSString *)app_Token{
+    if (app_Token && app_Token.length > 1) {
+        [[NSUserDefaults standardUserDefaults] setObject:app_Token forKey:APPToken];
+    }else
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:APPToken];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)getAppToken{
+    NSString *app_token = [[NSUserDefaults standardUserDefaults] objectForKey:APPToken];
+    if (!app_token) {
+        return @"";
+    }
+    return app_token;
+}
+
++ (NSString *)getAppTokenAdmin{
+    NSString *app_token_admin = @"app_token=0&";
+    if ([self getAppToken] && [[self getAppToken] length] > 1) {
+        app_token_admin = [NSString stringWithFormat:@"app_token=%@/",[self getAppToken]];
+    }
+    return app_token_admin;
+}
+
+
+
+#pragma mark === Function
+/*!
+ @brief     图片下载API
+ @return    NSString
+ */
++ (NSString *)imageDownloadAPI
+{
+    return kBaseURL;
+}
+
+/*!
+ @brief     版本检测
+ @return    NSString
+ */
++ (NSString *)getCheckVersionAPI{
+    return [self getFullApi:kDDGCheckVersionAPIString];
+}
+
+/*!
+ @brief     获取验证码
+ @return    NSString
+ */
++ (NSString *)getRegSendMsghAPI{
+    return [self getFullApi:kDDGRegSendMsgAPIString];
+}
+
+/*!
+ @brief     手机注册
+ @return    NSString
+ */
++ (NSString *)userGetRegisterAPI
+{
+    return [self getFullApi:kDDGUserGetRegisterAPIString];
+}
+/*!
+ @brief     手机注册获取验证码
+ @return    NSString
+ */
++ (NSString *)userRegisterPasswordAPI
+{
+    return [self getFullApi:KDDGUserRegistPwdSendMsgAPIString];
+}
+
+/*!
+ @brief     用户注册协议
+ @return    NSString
+ */
++ (NSString *)getAgreementAPI
+{
+    return [self getFullApi:kDDGGetAgreementAPIString];
+}
+
+/*!
+ @brief     忘记密码
+ @return    NSString
+ */
++ (NSString *)userForgetPasswordAPI
+{
+    return [self getFullApi:KDDGUserForgetPasswordAPIString];
+}
+
+/*!
+ @brief     忘记密码获取验证码
+ @return    NSString
+ */
++ (NSString *)userForgetPwdSendMsgAPI
+{
+    return [self getFullApi:KDDGUserForgetPwdSendMsgAPIString];
+}
+
+/*!
+ @brief     登录
+ @return    NSString
+ */
++ (NSString *)userDoLoginAPI
+{
+    return [self getFullApi:kDDGGetLoginAPIString];
+}
+
+/*!
+ @brief     退出登录
+ @return    NSString
+ */
++ (NSString *)userDoLogoutAPI
+{
+    return [self getFullApi:kDDGUserDoLogoutAPIString];
+}
+
+/*!
+ @brief     获取引导页图片列表
+ @return    NSString 获取引导页图片API
+ */
++ (NSString *)getLoadingImgsAPI
+{
+    return [self getFullApi:kDDGGetLoadingImgsAPIString];
+}
+
+
+/*
+ @brief     上传照片
+ @return    NSString
+ */
++ (NSString *)userUploadPhotoAPI
+{
+    return [self getFullApi:kDDGUserUploadPhotoAPIString];
+}
+
+
+/*!
+ @brief     发送反馈数据
+ @return    NSString    发送反馈数据API字符串
+ */
++ (NSString *)sendFeedbackAPI
+{
+    return [self getFullApi:kDDGFeedBackAPIString];
+}
+
+/*!
+ @brief     获取版本号
+ @return    NSString
+ */
++ (NSString *)checkAppNewVersionAPI{
+    return [self getFullApi:kDDGGetVersionAPIString];
+}
+
+/**
+ *  //// ------------------------------      ------------------------------------ /////
+ */
+#pragma mark === 首页 (交单相关)
+/*!
+ @brief     banner 广告
+ @return    NSString
+ */
++ (NSString *)getBannerAPI{
+    return [self getFullApi:kDDGGetBannerAPIString];
+}
+/*!
+ @brief     武功秘籍类型
+ @return    NSString
+ */
++ (NSString *)getInMiJiInfoAPI{
+    return [self getFullApi:kDDGGetMiJiAPIString];
+}
+/*!
+ @brief     上传城市
+ @return    NSString
+ */
++ (NSString *)getSelectCityAPI{
+    return [self getFullApi:kDDGGetSelectCityAPIString];
+}
+/*!
+ @brief     武功秘籍列表
+ @return    NSString
+ */
++ (NSString *)getInQueryListAPI{
+    return [self getFullApi:kDDGGetQueryListAPIString];
+}
+
+/*!
+ @brief     武功秘籍详情
+ @return    NSString
+ */
++ (NSString *)getInMiJiDetailAPI{
+    return [self getFullApi:kDDGGetMiJiDetailAPIString];
+}
+
+/*!
+ @brief     武功秘籍详情分享
+ @return    NSString
+ */
++ (NSString *)getInMiJiShareAPI{
+    return [self getFullApi:kDDGGetMiJiShareAPIString];
+}
+/*!
+ @brief     贷款测算
+ @return    NSString
+ */
++ (NSString *)getInCalCLoanAmountAPI{
+    return [self getFullApi:kDDGGetCalcLoanAmountAPIString];
+}
+/*!
+ @brief     资讯详情
+ @return    NSString
+ */
++ (NSString *)userGetCardNewsDetailInfoAPI
+{
+    return [self getFullApi:kDDGUserGetCardNewsDetailInfoAPIString];
+}
+/*!
+ @brief     资讯详情分享
+ @return    NSString
+ */
++ (NSString *)userGetCardNewsShareInfoAPI;
+
+{
+    return [self getFullApi:kDDGUserGetCardNewsShareInfoAPIString];
+}
+/*!
+ @brief     资讯分享成功修改积分
+ @return    NSString
+ */
++ (NSString *)userGetRewardShareInfoAPI
+{
+    return [self getFullApi:kDDGUserGetRewardShareInfoAPIString];
+}
+/*!
+ @brief     信贷员列表
+ @return    NSString
+ */
++ (NSString *)getQueryCirclesListAPI
+{
+    return [self getFullApi:kDDGGetQueryCirclesListAPIString];
+}
+/*!
+ @brief     增加关注
+ @return    NSString
+ */
++ (NSString *)getAddJoinCirclesAPI
+{
+    return [self getFullApi:kDDGGetAddJoinCirclesAPIString];
+}
+/*!
+ @brief     取消关注
+ @return    NSString
+ */
++ (NSString *)getCancelJoinCirclesAPI
+{
+    return [self getFullApi:kDDGGetCancelJoinCirclesAPIString];
+}
+/*!
+ @brief     我的关注列表
+ @return    NSString
+ */
++ (NSString *)getMyJoinListAPI
+{
+    return [self getFullApi:kDDGGetMyJoinListAPIString];
+}
+/*!
+ @brief     机构列表
+ @return    NSString
+ */
++ (NSString *)getInstitutionListAPI{
+    return [self getFullApi:kDDGGetInstitutionListAPIString];
+}
+
+/*!
+ @brief     机构产品
+ @return    NSString
+ */
++ (NSString *)getInstitutionProductListAPI{
+    return [self getFullApi:kDDGGetInstitutionProductListAPIString];
+}
+
+/*!
+ @brief     产品详情
+ @return    NSString
+ */
++ (NSString *)getInstitutionProductDetailAPI{
+    return [self getFullApi:kDDGGetInstitutionProductDetailAPIString];
+}
+
+/*!
+ @brief     交单
+ @return    NSString
+ */
++ (NSString *)getSendOrderAPI{
+    return [self getFullApi:kDDGGetSendOrderAPIString];
+}
+
+/*!
+ @brief     交单 -- 简单交单之获取验证码
+ @return    NSString
+ */
++ (NSString *)getSendOrderVerifyCodeAPI{
+    return [self getFullApi:kDDGGetSendOrderVerifyCodeAPIString];
+}
+
+/*!
+ @brief     交单 -- 简单交单之微信分享
+ @return    NSString
+ */
++ (NSString *)getSendOrderWXAPI{
+    return [self getFullApi:kDDGGetSendOrderWXAPIString];
+}
+
+/*!
+ @brief     交单 -- 简单交单之短信分享
+ @return    NSString
+ */
++ (NSString *)getSendOrderSMSAPI{
+    return [self getFullApi:kDDGGetSendOrderSMSAPIString];
+}
+
+/*!
+ @brief     取消订单
+ @return    NSString
+ */
++ (NSString *)getCanelOrderAPI{
+    return [self getFullApi:kDDGGetCancelOrderAPIString];
+}
+
+/*!
+ @brief     我的交单
+ @return    NSString
+ */
++ (NSString *)getMyOrderAPI{
+    return [self getFullApi:kDDGGetMyOrderAPIString];
+}
+
+/*!
+ @brief     交单详情
+ @return    NSString
+ */
++ (NSString *)getOrderDetailAPI{
+    return [self getFullApi:kDDGGetOrderDetailAPIString];
+}
+
+/*!
+ @brief     读取材料
+ @return    NSString
+ */
++ (NSString *)getSendProductFileAPI{
+    return [self getFullApi:kDDGGetFileListAPIString];
+}
+
+/*!
+ @brief     上传材料
+ @return    NSString
+ */
++ (NSString *)getSendFileAPI{
+    return [self getFullApi:kDDGGetSendFileAPIString];
+}
+
+/*!
+ @brief     删除材料
+ @return    NSString
+ */
++ (NSString *)getDeleteFileAPI{
+    return [self getFullApi:kDDGGetDeleteFileAPIString];
+}
+
+/*!
+ @brief     完整交单 -- 提交材料
+ @return    NSString
+ */
++ (NSString *)getSendCompleteFileAPI{
+    return [self getFullApi:kDDGGetSendCompleteOrderAPIString];
+}
+
+/*!
+ @brief     完整交单 -- 重新提交材料
+ @return    NSString
+ */
++ (NSString *)getReSendCompleteFileAPI{
+    return [self getFullApi:kDDGGetReSendCompleteOrderAPIString];
+}
+
+/*!
+ @brief     查号记录
+ @return    NSString
+ */
++ (NSString *)getSearchRecordListAPI{
+    return [self getFullApi:kDDGGetSearchRecordListAPIString];
+}
+
+/*!
+ @brief     申请查号
+ @return    NSString
+ */
++ (NSString *)getSearchNumAPI{
+    return [self getFullApi:kDDGGetSearchNumAPIString];
+}
+
+
+/**
+ *  获取金融资讯
+ */
++ (NSString *)getFinanceNewsAPI{
+    return [self getFullApi:kDDGGetFinanceNewsAPIString];
+}
+
+
+
+
+/*!
+ @brief     系统通知
+ @return    NSString
+ */
++ (NSString *)getNewsQueryListAPI{
+    return [self getFullApi:kDDGGetNewsQueryListAPIString];
+}
+/*!
+ @brief     系统通知详情
+ @return    NSString
+ */
++ (NSString *)getNewsViewAPI{
+    return [self getFullApi:kDDGGetViewAPIString];
+}
+
+
+//征信查询
+/*!
+ @brief     登陆注册图片验证码
+ @return    NSString
+ */
++ (NSString *)getCheckCreditAPI{
+   return [self getFullApi:kDDGGetCheckCreditAPIString];
+}
+/*!
+ @brief     注册第一步
+ @return    NSString
+ */
++ (NSString *)getCheckCreditRegAPI{
+    return [self getFullApi:kDDGGetCheckCreditRegAPIString];
+}
+/*!
+ @brief     注册第二步
+ @return    NSString
+ */
++ (NSString *)getCheckCreditRegSupplementInfoAPI{
+    return [self getFullApi:kDDGGetCheckCreditRegSupplementAPIString];
+}
+/*!
+ @brief     登陆
+ @return    NSString
+ */
++ (NSString *)getCheckCreditLoginAPI{
+    return [self getFullApi:kDDGGetCheckCreditLoginAPIString];
+}
+/*!
+ @brief     注册验证码
+ @return    NSString
+ */
++ (NSString *)getCheckCreditSendRegMsgAPI{
+    return [self getFullApi:kDDGGetCheckCreditSendRegMsgAPIString];
+}
+/*!
+ @brief     问题验证问题
+ @return    NSString
+ */
++ (NSString *)getCheckCreditIdentityDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditIdentityDataAPIString];
+}
+/*!
+ @brief     提交问题
+ @return    NSString
+ */
++ (NSString *)getCheckCreditQuestionDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditQuestionAPIString];
+}
+/*!
+ @brief     用户列表
+ @return    NSString
+ */
++ (NSString *)getCheckCreditInitDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditInitDataAPIString];
+}
+/*!
+ @brief     用户列表信息
+ @return    NSString
+ */
++ (NSString *)getCheckCreditReportListDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditReportListDataAPIString];
+}
+
+/*!
+ @brief     核对银行验证码
+ @return    NSString
+ */
++ (NSString *)getCheckCreditReportAPI{
+    return [self getFullApi:kDDGGetCheckCreditReportAPIString];
+}
+
+/*!
+ @brief     信息列表
+ @return    NSString
+ */
++ (NSString *)getCheckCreditReportDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditReportDataAPIString];
+}
+/*!
+ @brief     贷款记录明细
+ @return    NSString
+ */
++ (NSString *)getCheckCreditRecordDataAPI{
+    return [self getFullApi:kDDGGetCheckCreditRecordDataAPIString];
+}
+/*!
+ @brief     查询记录明细
+ @return    NSString
+ */
++ (NSString *)getCheckQueryReocrdDataAPI{
+    return [self getFullApi:kDDGGetCheckQueryReocrdDataAPIString];
+}
+//企业查询
+/*!
+ @brief     企业查询结果
+ @return    NSString
+ */
++ (NSString *)getCheckQueryDataAPI{
+    return [self getFullApi:kDDGGetCheckQueryDataAPIString];
+}
+
+/*!
+ @brief     查询结果详情
+ @return    NSString
+ */
++ (NSString *)getCheckQueryDetailDataAPI{
+    return [self getFullApi:kDDGGetCheckQueryDetailDataAPIString];
+}
+
+//失信人查询
+/*!
+ @brief     失信人查询结果
+ @return    NSString
+ */
++ (NSString *)getChecksSXRQueryDataAPI{
+    return [self getFullApi:kDDGGetCheckSXRQueryDataAPIString];
+}
+/*!
+ @brief     失信人查询结果详情
+ @return    NSString
+ */
++ (NSString *)getChecksSXRDetailDataAPI{
+    return [self getFullApi:kDDGGetCheckSXRDetailDataAPIString];
+}
+//房价评估
+/*!
+ @brief     所在城市列表
+ @return    NSString
+ */
++ (NSString *)getChecksAllCityAPI{
+    return [self getFullApi:kDDGGetCheckAllCityAPIString];
+}
+/*!
+ @brief     提交所在城市
+ @return    NSString
+ */
++ (NSString *)getEvalTypeListAPI{
+    return [self getFullApi:kDDGGetEvalTypeListAPIString];
+}
+/*!
+ @brief     选择物业查询楼盘
+ @return    NSString
+ */
++ (NSString *)getQueryEstateAPI{
+    return [self getFullApi:kDDGGetQueryEstateAPIString];
+}
+/*!
+ @brief     选择物业查询楼栋
+ @return    NSString
+ */
++ (NSString *)getQueryBuildingAPI{
+    return [self getFullApi:kDDGGetQueryBuildingAPIString];
+}
+/*!
+ @brief     选择物业查询门牌号
+ @return    NSString
+ */
++ (NSString *)getQueryHouseAPI{
+    return [self getFullApi:kDDGGetQueryHouseAPIString];
+}
+/*!
+ @brief     提交评估
+ @return    NSString
+ */
++ (NSString *)getSaveHouseEvalAPI{
+    return [self getFullApi:kDDGGetSaveHouseEvalAPIString];
+}
+/*!
+ @brief     评估历史
+ @return    NSString
+ */
++ (NSString *)getHistoryRecordAPI{
+    return [self getFullApi:kDDGGetHistoryRecordAPIString];
+}
+
+//资讯
+/*!
+ @brief     资讯头像
+ @return    NSString
+ */
++ (NSString *)getFinanceNewsHeadImgAPI{
+    return [self getFullApi:kDDGGetFinanceNewsHeadImgAPIString];
+}
+
+/*!
+ @brief     直贷头像
+ @return    NSString
+ */
++ (NSString *)getLoanListHeadImgAPI{
+    return [self getFullApi:kDDGGetLoanListHeadImgAPIString];
+}
+
+/*!
+ @brief     抢单－直借
+ @return    NSString
+ */
++ (NSString *)getLoanLightingAPI{
+    return [self getFullApi:kDDGGetLoanLightingAPIString];
+}
+
+/*!
+ @brief     抢单－甩单
+ @return    NSString
+ */
++ (NSString *)getLoanLighting2API{
+    return [self getFullApi:kDDGGetLoanLighting2APIString];
+}
+
+#pragma mark === Tab_2  客户
+/*!
+ @brief     客户列表
+ @return    NSString
+ */
++ (NSString *)getContactListAPI{
+    return [self getFullApi:kDDGGetContactListString];
+}
+
+/*!
+ @brief     删除客户
+ @return    NSString
+ */
++ (NSString *)getDeleteContactAPI{
+    return [self getFullApi:kDDGGetDeleteContactString];
+}
+
+/*!
+ @brief     添加客户
+ @return    NSString
+ */
++ (NSString *)getAddContactAPI{
+    return [self getFullApi:kDDGGetAddContactString];
+}
+
+/*!
+ @brief     修改客户信息
+ @return    NSString
+ */
++ (NSString *)getUpdateContactListAPI{
+    return [self getFullApi:kDDGGetUpdateContactString];
+}
+
+/*!
+ @brief     修改客户标签初始数据
+ @return    NSString
+ */
++ (NSString *)getContactMarksDtlAPI{
+    return [self getFullApi:kDDGGetContactMarksDtlString];
+}
+
+
+/*!
+ @brief     修改客户标签
+ @return    NSString
+ */
++ (NSString *)getUpdateContactMarksAPI{
+    return [self getFullApi:kDDGGetUpdateContactMarksString];
+}
+
+/*!
+ @brief     客户标星处理
+ @return    NSString
+ */
++ (NSString *)getUpdateContactStarAPI{
+    return [self getFullApi:kDDGGetUpdateContactStarString];
+}
+
+/*!
+ @brief     查寻标签
+ @return    NSString
+ */
++ (NSString *)getMarksListAPI{
+    return [self getFullApi:kDDGGetMarksListString];
+}
+
+/*!
+ @brief     标签下的客户
+ @return    NSString
+ */
++ (NSString *)getMarksContactListAPI{
+    return [self getFullApi:kDDGGetMarksContactListString];
+}
+
+/*!
+ @brief     添加标签
+ @return    NSString
+ */
++ (NSString *)getAddMarksAPI{
+    return [self getFullApi:kDDGGetAddMarksString];
+}
+
+/*!
+ @brief     修改标签
+ @return    NSString
+ */
++ (NSString *)getUpdateMarksAPI{
+    return [self getFullApi:kDDGGetUpdateMarksString];
+}
+
+/*!
+ @brief     删除标签
+ @return    NSString
+ */
++ (NSString *)getDeleteMarksAPI{
+    return [self getFullApi:kDDGGetDeleteMarksString];
+}
+
+
+
+#pragma mark === Tab_3  微店
+/*!
+ @brief     微店首页
+ @return    NSString
+ */
++ (NSString *)userGetWDShopIndexInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWDShopIndexInfoAPIString];
+}
+/*!
+ @brief     申请列表
+ @return    NSString
+ */
++ (NSString *)userGetWDShopApplyListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWDShopApplyListInfoAPIString];
+}
+/*!
+ @brief     申请产品详情
+ @return    NSString
+ */
++ (NSString *)userGetApplyDetailInfoAPI
+{
+    return [self getFullApi:kDDGUserGetApplyDetailInfoAPIString];
+}
+/*!
+  @brief     创建微店的初始化信息
+  @return    NSString
+  */
++ (NSString *)userGetWDShopWdInfoInitInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWDShopWdInfoInitInfoAPIString];
+}
+/*!
+ @brief     修改微店信息
+ @return    NSString
+ */
++ (NSString *)userGetWDShopEditInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWDShopEditInfoAPIString];
+}
+/*!
+ @brief     查询微店信息
+ @return    NSString
+ */
++ (NSString *)userGetWDShopQueryInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWDShopQueryInfoAPIString];
+}
+
+/*!
+ @brief     微店统计
+ @return    NSString
+ */
++ (NSString *)userGetWdApplyStatisticAPI
+{
+    return [self getFullApi:kDDGUserGetWdApplyStatistic];
+}
+
+/*!
+ @brief     所有城市列表
+ @return    NSString
+ */
++ (NSString *)userGetWDShopCityInfoAPI;
+
+{
+    return [self getFullApi:kDDGUserGetWDShopCityInfoAPIString];
+}
+
+/*!
+ @brief     微店排行
+ @return    NSString
+ */
++ (NSString *)userGetwdShopRankInfoAPI
+{
+    return [self getFullApi:kDDGUserGetwdShopRankInfoAPIString];
+}
+/*!
+ @brief     微店产品增加/修改
+ @return    NSString
+ */
++ (NSString *)userGetWdProductInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWdProductInfoAPIString];
+}
+/*!
+ @brief     微店产品增加第二步
+ @return    NSString
+ */
++ (NSString *)userGetWdProductDtlInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWdProductDtlInfoAPIString];
+}
+/*!
+ @brief     微店产品列表
+ @return    NSString
+ */
++ (NSString *)userGetwdproductListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWdProductListInfoAPIString];
+}
+
+/*!
+ @brief     微店产品删除
+ @return    NSString
+ */
++ (NSString *)userGetwddelWdProductInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWddelWdProductInfoAPIString];
+}
+
+/*!
+ @brief     微店产品信息
+ @return    NSString
+ */
++ (NSString *)userGetwdWdPordInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWdPordInfoAPIString];
+}
+/*!
+ @brief     微店产品信息第二步
+ @return    NSString
+ */
++ (NSString *)userGetWdProRuleInfoAPI
+{
+    return [self getFullApi:kDDGUserGetWdProRuleInfoAPIString];
+}
+/*!
+ @brief     微店名片信息
+ @return    NSString
+ */
++ (NSString *)userGetwdCardInfoAPI
+{
+    return [self getFullApi:kDDGUserGetwdCardInfoAPIString];
+}
+
+/*!
+ @brief     微店名片新增或修改
+ @return    NSString
+ */
++ (NSString *)userGetwdeditCardInfoAPI
+{
+    return [self getFullApi:kDDGUserGetwdeditCardInfoAPIString];
+}
+/*!
+ @brief     成功案例列表
+ @return    NSString
+ */
++ (NSString *)userGetCustCaseListInfoAPI{
+    return [self getFullApi:kDDGUserGetCustCaseListInfoAPIString];
+}
+/*!
+ @brief     添加成功案例
+ @return    NSString
+ */
++ (NSString *)userGetEditCustCaseInfoAPI
+{
+    return [self getFullApi:kDDGUserGetEditCustCaseInfoAPIString];
+}
+/*!
+ @brief     查询成功案例
+ @return    NSString
+ */
++ (NSString *)userGetCustCaseInfoAPI
+{
+    return [self getFullApi:kDDGUserGetCustCaseInfoAPIString];
+}
+/*!
+ @brief     删除成功案例
+ @return    NSString
+ */
++ (NSString *)userGetDelCustCaseInfoAPI
+{
+    return [self getFullApi:kDDGUserGetDelCustCaseInfoAPIString];
+}
+/*!
+ @brief     微店模板
+ @return    NSString
+ */
++ (NSString *)userGetWdShopTemplateListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetTemplateListInfoAPIString];
+}
+/*!
+ @brief     微店模板修改
+ @return    NSString
+ */
++ (NSString *)userGetEditWdShopInfoAPI
+{
+    return [self getFullApi:kDDGUserGetEditWdShopInfoAPIString];
+}
+
+/*!
+ @brief     分享微店Html5
+ @return    NSString
+ */
++ (NSString *)userGetShareWdWedInfoAPI
+{
+    return [self getFullApi:kDDGUserGetShareWdWedInfoAPIString];
+}
+
+
+#pragma mark === Tab_4  我的
+/*!
+ @brief     不需要登录 -- 当前版本的配置与版本号等
+ @return    NSString
+ */
++ (NSString *)getUserInfoAPI
+{
+    return [self getFullApi:kDDGGetUserInfoAPIString];
+}
+
+/*!
+ @brief     用户基本信息 需要登录 -- 个人信息（用户ID、昵称、性别、生日、省份、城市、详细地址、个人说明、 ）
+ @return    NSString
+ */
++ (NSString *)getUserBaseInfoAPI{
+    return [self getFullApi:kDDGGetUserBaseInfoAPIString];
+}
+
+/*!
+ @brief     修改或添加个人信息
+ @return    NSString
+ */
++ (NSString *)userGetUserPIMInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserPIMInfoAPIString];
+}
+
+/*!
+ @brief     修改或添加个人简介及城市地区
+ @return    NSString
+ */
++ (NSString *)userGetInsertInfoAPI
+{
+    return [self getFullApi:kDDGUserGetInsertInfoAPIString];
+}
+
+/*!
+ @brief     一次性提交个人信息
+ @return    NSString
+ */
++ (NSString *)userGetModifyInfoAPI
+{
+    return [self getFullApi:kDDGUserGetModifyInfoAPIString];
+}
+
+/*!
+ @brief     头像
+ @return    NSString
+ */
++ (NSString *)getUserHeadImageAPI
+{
+    return [self getFullApi:kDDGUserGetUserHeadImageInfoAPIString];
+}
+
+/*!
+ @brief     身份认证
+ @return    NSString
+ */
++ (NSString *)getValidateNameAPI
+{
+    return [self getFullApi:kDDGGetValidateNameInfoAPIString];
+}
+
+/*!
+ @brief     工作认证
+ @return    NSString
+ */
++ (NSString *)getProfessionAPI
+{
+    return [self getFullApi:kDDGGetProfessionInfoAPIString];
+}
+/*!
+ @brief     服务区域
+ @return    NSString
+ */
++ (NSString *)getAllAreaInfoAPI
+{
+    return [self getFullApi:kDDGGetAllAreaInfoAPIString];
+}
+/*!
+ @brief     提交工作地点
+ @return    NSString
+ */
++ (NSString *)getModifyLocaInfoAPI
+{
+    return [self getFullApi:kDDGGetModifyLocaAPIString];
+}
+
+/*!
+ @brief     第一次添加邮箱
+ @return    NSString
+ */
++ (NSString *)userGetUserEmailInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserEmailInfoAPIString];
+}
+
+/*!
+ @brief     修改邮箱
+ @return    NSString
+ */
++ (NSString *)userGetUserAmendEmailInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserAmendEmailInfoAPIString];
+}
+
+/*!
+ @brief     修改邮箱获取验证码
+ @return    NSString
+ */
++ (NSString *)userForgetEmailSendMsgAPI
+{
+    return [self getFullApi:KDDGUserForgetEmailSendMsgAPIString];
+}
+
+/*!
+ @brief     修改密码，设置里面的
+ @return    NSString
+ */
++ (NSString *)userGetUserModifyLoginPwdInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserModifyLoginPwdInfoAPIString];
+}
+/*!
+ @brief     公司简介，关于小小金融
+ @return    NSString
+ */
++ (NSString *)userGetUserXxjrInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserXxjrInfoAPIString];
+}
+/*!
+ @brief     设置交易密码
+ @return    NSString
+ */
++ (NSString *)setPayPassword
+{
+    return [self getFullApi:KDDGSetPayPasswordAPIString];
+}
+
+/*!
+ @brief     修改交易密码
+ @return    NSString
+ */
++ (NSString *)userEditPayPwdAPI
+{
+    return [self getFullApi:KDDGUserEditPayPwdAPIString];
+}
+
+
+
+/*!
+ @brief     更换手机
+ @return    NSString
+ */
++ (NSString *)userGetUserNewTelInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserNewTelInfoAPIString];
+}
+
+/*!
+ @brief     更换手机获取原手机号验证码
+ @return    NSString
+ */
++ (NSString *)userGetUserChangeTelSendAPI
+{
+    return [self getFullApi:kDDGUserGetUserChangeTelSendAPIString];
+}
+
+/*!
+ @brief     验证原手机获取的验证码
+ @return    NSString
+ */
++ (NSString *)userGetUserTelInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserTelInfoAPIString];
+}
+
+/*!
+ @brief     更换手机获取新手机验证码
+ @return    NSString
+ */
++ (NSString *)userGetUserTelNewSendAPI
+{
+    return [self getFullApi:kDDGUserGetUserTelNewSendAPIString];
+}
+
+/*!
+ @brief     意见反馈，设置里面的
+ @return    NSString
+ */
++ (NSString *)userGetUserFeedBackInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserFeedBackInfoAPIString];
+}
+
+
+/*!
+ @brief     我的业绩总信息
+ @return    NSString
+ */
++ (NSString *)userGetUserSummaryInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserSummaryInfoAPIString];
+}
+
+/*!
+ @brief     绑定微信
+ @return    NSString
+ */
++ (NSString *)userGetUserBindingWXAPI
+{
+    return [self getFullApi:kDDGUserBindingWXAPIString];
+}
+
+
+/*!
+ @brief     提现明细
+ @return    NSString
+ */
++ (NSString *)userGetUserQueryWithdrawInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserQueryWithdrawInfoAPIString];
+}
+
+/*!
+ @brief     剩余佣金提现处理
+ @return    NSString
+ */
++ (NSString *)userGetUserAddWithdrawInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserAddWithdrawInfoAPIString];
+}
+/*!
+ @brief     剩余佣金提现处理获取验证码
+ @return    NSString
+ */
++ (NSString *)getRegWithdrawSendMsghAPI
+{
+    return [self getFullApi:kDDGUserGetWithdrawSendInfoAPIString];
+}
+/*!
+ @brief     已返佣金
+ @return    NSString
+ */
++ (NSString *)userGetUserQueryMyListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserQueryMyListInfoAPIString];
+}
+
+/*!
+ @brief     可提现的银行
+ @return    NSString
+ */
++ (NSString *)userGetUserBankAllListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserBankAllListInfoAPIString];
+}
+
+/*!
+ @brief     获取银行卡信息
+ @return    NSString
+ */
++ (NSString *)userGetUserCardListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserCardListInfoAPIString];
+}
+/*!
+ @brief     添加银行卡
+ @return    NSString
+ */
++ (NSString *)userGetUserAddCardInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserBankAddCardInfoAPIString];
+}
+/*!
+ @brief     我要收徒
+ @return    NSString
+ */
++ (NSString *)userGetUsershoutuInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUsershoutuInfoAPIString];
+}
+/*!
+ @brief     收徒赚佣金分享
+ @return    NSString
+ */
++ (NSString *)userGetUsershoutuShareInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUsershoutuShareInfoAPIString];
+}
+/*!
+ @brief     我的学徒
+ @return    NSString
+ */
++ (NSString *)userGetUserApprenticeListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserApprenticeListInfoAPIString];
+}
+/*!
+ @brief     为什么要收徒
+ @return    NSString
+ */
++ (NSString *)userGetUserReasonInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserReasonInfoAPIString];
+}
+/*!
+ @brief     如何收取更多徒弟
+ @return    NSString
+ */
++ (NSString *)userGetUserStrategyInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserStrategyInfoAPIString];
+}
+
+/*!
+ @brief     我的会员
+ @return    NSString
+ */
++ (NSString *)userGetUserCustGradeInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserCustGradeInfoAPIString];
+}
+
+/*!
+ @brief     我的抢单
+ @return    NSString
+ */
++ (NSString *)userGetUserCustGrabListInfoAPI
+{
+    return [self getFullApi:kDDGUserGetUserGrabListInfoAPIString];
+}
+
+
+
+@end

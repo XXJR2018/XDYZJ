@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2BF0C5A3-E8D1-4551-8125-EDC87DE0E125</string>
+	<key>IDESourceControlProjectName</key>
+	<string>DDGUtils</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>6442b804-04d2-4e4f-90f4-998a90a486c9++1849</key>
+		<string>http://192.168.1.190:8080/svn/iosclient/ddgBank-V1.0.0.0</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>DDGUtils/DDGUtils.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>6442b804-04d2-4e4f-90f4-998a90a486c9++1849</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>6442b804-04d2-4e4f-90f4-998a90a486c9++1849</key>
+		<string>http://192.168.1.190:8080/svn/iosclient</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://192.168.1.190:8080/svn/iosclient/ddgBank-V1.0.0.0/DDGUtils/DDGUtils.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>6442b804-04d2-4e4f-90f4-998a90a486c9++1849</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>6442b804-04d2-4e4f-90f4-998a90a486c9++1849</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ddgBank-V1.0.0.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>
