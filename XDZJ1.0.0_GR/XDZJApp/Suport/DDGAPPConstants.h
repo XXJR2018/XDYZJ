@@ -13,7 +13,7 @@
  *  友盟统计
  */
 
-#define UMENG_APPKEY @"5bfcb2a5f1f5567ab000031e4"  //   信贷员之家（马甲包）
+#define UMENG_APPKEY @"5bfcb2a5f1f5567ab000031e"  //   信贷员之家（马甲包）
 
 // 极光推送
 #define JPUSH_APPKEY @"1baedee0d1b2435a0eee2c3f"
