@@ -1206,7 +1206,7 @@
 
 -(void) actionTKXQ
 {
-    NSString *url = [NSString stringWithFormat:@"%@xxapp/protocol/robProtocol",[PDAPI WXSysRouteAPI]];
+    NSString *url = [NSString stringWithFormat:@"%@xxapp/protocol/lendHomeRob",[PDAPI WXSysRouteAPI]];
     [CCWebViewController showWithContro:self withUrlStr:url withTitle:@"抢单协议"];
 }
 
